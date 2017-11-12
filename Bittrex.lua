@@ -107,9 +107,9 @@ function EndSession()
 end
 
 function bin2hex(s)
- return (s:gsub(".", function (byte)
-   return string.format("%02x", string.byte(byte))
- end))
+  return (s:gsub(".", function (byte)
+    return string.format("%02x", string.byte(byte))
+  end))
 end
 
 function queryPrivate(method)
@@ -145,5 +145,4 @@ function queryPublic2(method, query)
   json = JSON(content)
 
   return json:dictionary()
-
 end
