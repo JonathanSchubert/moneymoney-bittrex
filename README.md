@@ -1,11 +1,11 @@
 # MoneyMoney-Bittrex
 
-This MoneyMoney extension fetches the Bittrex.com balances and returns them as securities.
+This MoneyMoney extension fetches the Bittrex.com balances and returns them as securities.  
 It will always return the securities as EUR. For the conversion BTC → EUR the coinmarketcap.com API is used.
 
 ## Extension Setup
 
-Download the extension file `Bittrex.lua` from this repository and move it to your MoneyMoney Extensions folder.
+Download the extension file `Bittrex.lua` from this repository and move it to your MoneyMoney Extensions folder.  
 MoneyMoney will direct you to this folder by selecting 'Show database in finder' in the Help menu.
 
 
@@ -26,6 +26,6 @@ Add a new account (type "Bittrex Account") and use your Bittrex API key as usern
 
 ### Links
 
-https://www.moneymoney-app.com
-https://www.coinmarketcap.com
-https://www.bittrex.com
+https://www.moneymoney-app.com  
+https://www.coinmarketcap.com  
+https://www.bittrex.com  
