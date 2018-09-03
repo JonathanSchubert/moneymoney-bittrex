@@ -25,7 +25,7 @@
 -- SOFTWARE.
 
 WebBanking {
-  version = 1.0,
+  version = 1.1,
   url = "https://bittrex.com",
   description = "Fetch balances from Bittrex API and list them as securities",
   services = { "Bittrex Account" },
@@ -71,33 +71,58 @@ function RefreshAccount(account, since)
     local amount_btc
     local amount_eur
     local price = 1
+    local status = true
 
     if value["Currency"] == "BTC" then
       amount_btc = value['Balance']
-      amount_eur = amount_btc * price_btc_eur
     elseif value["Currency"] == "USDT" then
       price = queryPublic("public/getticker", "?market=USDT-BTC")['Last']
       amount_btc = value['Balance'] / price
-      amount_eur = amount_btc * price_btc_eur
     else
-      price = queryPublic("public/getticker", "?market=BTC-" .. value["Currency"])['Last']
+      repl = queryPublic("public/getticker", "?market=BTC-" .. value["Currency"])
+      if repl == nil then
+        print(value['Currency'], value['Balance'])
+        print('Error: No price available on market')
+        status = false
+      else
+        price = repl['Last']
+      end
+
+      if price == nil then
+        print(value['Currency'], value['Balance'])
+        print('Error2: No price available on market')
+        status = false
+        price = 1
+      end
+
       amount_btc = price * value['Balance']
-      amount_eur = amount_btc * price_btc_eur
     end
+    amount_eur = amount_btc * price_btc_eur
 
     -- print(value['Currency'], value['Balance'])
     -- print('    ', 'price', price)
     -- print('    ', 'amount_btc', amount_btc)
     -- print('    ', 'amount_eur', amount_eur)
 
-    s[#s+1] = {
-      name = value["Currency"],
-      market = market,
-      currency = nil,
-      amount = amount_eur,
-      quantity = value['Balance'],
-      price = price * price_btc_eur
-    }
+    if status then
+      s[#s+1] = {
+        name = value["Currency"],
+        market = market,
+        currency = nil,
+        amount = amount_eur,
+        quantity = value['Balance'],
+        price = price * price_btc_eur
+      }
+    else
+      s[#s+1] = {
+        name = value["Currency"],
+        market = market,
+        currency = nil,
+        amount = nil,
+        quantity = nil,
+        price = nil
+      }
+    end
   end
 
   return {securities = s}
@@ -147,4 +172,4 @@ function queryPublic2(method, query)
   return json:dictionary()
 end
 
--- SIGNATURE: MCwCFBzpu/vWR4WqjlKp/pFQy8WdZj7uAhR6eHQQzniqolYm/DaXJ2xwTkVGcA==
+-- SIGNATURE: MCwCFCa1DNX18VXtiCmd+4ywS+WgHH4HAhR646jUDgUhnVGvKT47UhBDWoEXRQ==
