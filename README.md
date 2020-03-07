@@ -28,5 +28,5 @@ Add a new account in MoneyMoney (type "Bittrex Account") and use your Bittrex AP
 
 ### Links
 https://www.moneymoney-app.com  
-https://blockchain.info
+https://blockchain.info  
 https://www.bittrex.com  
