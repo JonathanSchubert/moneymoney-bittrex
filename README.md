@@ -1,7 +1,7 @@
 # MoneyMoney-Bittrex
 
 This MoneyMoney extension fetches your Bittrex.com balances and returns them as securities.  
-It will always return the securities as EUR. For the conversion BTC → EUR the coinmarketcap.com API is used.  
+It will always return the securities as EUR. For the conversion BTC → EUR the blockchain.info API is used.  
 
 ## Extension Setup
 
@@ -28,5 +28,5 @@ Add a new account in MoneyMoney (type "Bittrex Account") and use your Bittrex AP
 
 ### Links
 https://www.moneymoney-app.com  
-https://www.coinmarketcap.com  
+https://blockchain.info
 https://www.bittrex.com  
