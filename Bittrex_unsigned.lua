@@ -75,37 +75,37 @@ function RefreshAccount(account, since)
     local amount_eur
     local price = 1
     local status = true
-    
+
     local currency = value["Currency"]
     local balance = value["Balance"]
 
     if currency == "BTC" then
       amount_btc = balance
-      
+
     elseif currency == "USDT" then
       price = queryPublic_bittrex("public/getticker", "?market=USDT-BTC")['Last']
       amount_btc = balance / price
-      
+
     else
       repl = queryPublic_bittrex("public/getticker", "?market=BTC-" .. currency)
-      
+
       if repl == nil then
         print('Error 1: No price available on market for', currency)
         status = false
       else
         price = repl['Last']
       end
-      
+
       if price == nil then
         print('Error 2: No price available on market for', currency)
         status = false
         price = 1
       end
-      
+
       amount_btc = price * balance
-      
+
     end
-    
+
     amount_eur = amount_btc * price_btc_eur
 
     -- print(currency, balance)
@@ -191,5 +191,3 @@ function queryPublic_bci(method, query)
 
   return json:dictionary()
 end
-
--- SIGNATURE: MCwCFCa1DNX18VXtiCmd+4ywS+WgHH4HAhR646jUDgUhnVGvKT47UhBDWoEXRQ==
