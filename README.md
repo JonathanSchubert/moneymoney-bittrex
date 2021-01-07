@@ -8,8 +8,8 @@ It will always return the securities as EUR. For the conversion BTC → EUR the 
 Download the signed extension file `Bittrex.lua` from  
 * the  [`dist` directory in this repository](https://github.com/JonathanSchubert/moneymoney-bittrex/blob/master/dist/Bittrex.lua), or  
 * the [MoneyMoney Extensions](https://moneymoney-app.com/extensions/) page  
-Just move the file to your MoneyMoney Extensions folder.  
-MoneyMoney will direct you to this folder by selecting 'Show database in finder' in the Help menu.  
+
+Just move the file to your MoneyMoney Extensions folder.   MoneyMoney will direct you to this folder by selecting 'Show database in finder' in the Help menu.  
 
 ## Account Setup
 

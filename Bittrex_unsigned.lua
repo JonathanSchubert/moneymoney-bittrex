@@ -25,29 +25,29 @@
 -- SOFTWARE.
 
 WebBanking {
-    version = 1.3,
+    version = 1.4,
     url = "https://api.bittrex.com",
     description = "Fetch balances from Bittrex API and list them as securities",
     services = { "Bittrex Account" },
   }
-  
+
   local apiKey
   local apiSecret
   local currency
   local apiUrlVersion = "v3"
   local market = "Bittrex"
   local accountNumber = "Main"
-  
+
   function SupportsBank(protocol, bankCode)
     return protocol == ProtocolWebBanking and bankCode == "Bittrex Account"
   end
-  
+
   function InitializeSession(protocol, bankCode, username, username2, password, username3)
     apiKey = username
     apiSecret = password
     currency = "EUR"
   end
-  
+
   function ListAccounts(knownAccounts)
     local account = {
       name = market,
@@ -58,11 +58,11 @@ WebBanking {
     }
     return {account}
   end
-  
+
   function RefreshAccount(account, since)
     local s = {}
     local price_btc_eur
-  
+
     -- Retrieve BTC price in EUR
     -- price_btc_eur = queryPublic_cmc('ticker/bitcoin/', '?convert=EUR')[1]['price_eur']
     price_btc_eur = queryPublic_bci('tobtc', '?currency=EUR&value=1000')
@@ -76,15 +76,19 @@ WebBanking {
       local amount_eur
       local price = 1
       local status = true
-  
+
       local currency = value["currencySymbol"]
       local balance = value["total"]
-  
+
       if currency == "BTC" then
         amount_btc = balance
-  
+
       elseif currency == "USDT" then
         price = queryPublic_bittrex("markets/", "BTC-USDT/ticker")['lastTradeRate']
+        amount_btc = balance / price
+
+      elseif currency == "USD" then
+        price = queryPublic_bittrex("markets/", "BTC-USD/ticker")['lastTradeRate']
         amount_btc = balance / price
 
       elseif currency == "BTXCRD" then
@@ -95,31 +99,31 @@ WebBanking {
 
       else
         repl = queryPublic_bittrex("markets/", currency .. "-BTC/ticker") or nil
-  
+
         if repl == nil then
           print('Error 1: No price available on market for', currency)
           status = false
         else
           price = repl['lastTradeRate']
         end
-  
+
         if price == nil then
           print('Error 2: No price available on market for', currency)
           status = false
           price = 1
         end
-  
+
         amount_btc = price * balance
-        
+
       end
-  
+
       amount_eur = amount_btc * price_btc_eur
-  
+
       -- print(currency, balance)
       -- print('    ', 'price', price)
       -- print('    ', 'amount_btc', amount_btc)
       -- print('    ', 'amount_eur', amount_eur)
-  
+
       if status then
         s[#s+1] = {
           name = currency,
@@ -140,19 +144,19 @@ WebBanking {
         }
       end
     end
-  
+
     return {securities = s}
   end
-  
+
   function EndSession()
   end
-  
+
   function bin2hex(s)
     return (s:gsub(".", function (byte)
       return string.format("%02x", string.byte(byte))
     end))
   end
-  
+
 
   function queryPrivate_bittrex_balances()
 
@@ -160,7 +164,7 @@ WebBanking {
     local path = string.format("/%s/%s", apiUrlVersion, endpoint)
     local method = "GET"
     local nonce = string.format("%d", MM.time()*1000)
-    
+
     local content = ""
     local contentHash = MM.sha512(content)
     contentHash = string.lower(contentHash)
@@ -188,7 +192,7 @@ WebBanking {
     -- print("headers[Api-Signature]:", headers["Api-Signature"])
     -- print("headers[Accept]:", headers["Accept"])
     -- print("------------------------------")
-    
+
     connection = Connection()
     content = connection:request(method, url .. path, nil, nil, headers)
     json = JSON(content)
@@ -211,26 +215,25 @@ WebBanking {
 
     return json:dictionary()
   end
-  
+
   function queryPublic_cmc(method, query)
     local url = 'https://api.coinmarketcap.com'
     local path = string.format("/v1/%s", method)
-  
+
     connection = Connection()
     content = connection:request("GET", url .. path .. query)
     json = JSON(content)
-  
+
     return json:dictionary()
   end
-  
+
   function queryPublic_bci(method, query)
     local url = 'https://blockchain.info'
     local path = string.format("/%s", method)
-  
+
     connection = Connection()
     content = connection:request("GET", url .. path .. query)
     json = JSON(content)
-  
+
     return json:dictionary()
   end
-  
