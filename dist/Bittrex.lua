@@ -25,7 +25,7 @@
 -- SOFTWARE.
 
 WebBanking {
-    version = 1.3,
+    version = 1.4,
     url = "https://api.bittrex.com",
     description = "Fetch balances from Bittrex API and list them as securities",
     services = { "Bittrex Account" },
@@ -85,6 +85,10 @@ WebBanking {
 
       elseif currency == "USDT" then
         price = queryPublic_bittrex("markets/", "BTC-USDT/ticker")['lastTradeRate']
+        amount_btc = balance / price
+
+      elseif currency == "USD" then
+        price = queryPublic_bittrex("markets/", "BTC-USD/ticker")['lastTradeRate']
         amount_btc = balance / price
 
       elseif currency == "BTXCRD" then
@@ -234,4 +238,4 @@ WebBanking {
     return json:dictionary()
   end
 
--- SIGNATURE: MCwCFFW2zuHCb7DcrVCI2XZa1AqM2GX4AhRp8xktExdehgzO4XRx6LKdcGipiw==
+-- SIGNATURE: MC0CFQCRDzeH9foTaSl2Ehe/BLu21cglNgIURRzMCr1/XvEPrDr7rFb+ZUKGtN8=
